@@ -1,0 +1,2 @@
+class SlideOverControl < UIControl
+end
