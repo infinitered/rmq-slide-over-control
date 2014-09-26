@@ -7,9 +7,11 @@ require 'bundler'
 require 'motion/project/template/gem/gem_tasks'
 Bundler.require
 
-require 'ruby_motion_query'
-
 Motion::Project::App.setup do |app|
   app.name = 'slide-over-control'
   app.identifier = 'com.infinitered.motion-scene-kit'
+
+  app.sdk_version = "8.0"
+  app.deployment_target = "7.1"
+  app.frameworks += %w[MapKit]
 end
