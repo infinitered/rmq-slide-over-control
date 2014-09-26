@@ -1,21 +1,25 @@
 class SlideOverControl < UIControl
   attr_accessor :slide_bar_bottom_margin, :slide_bar_top_margin, :slide_bar_height,
-    :open_slide_bar_center, :auto_close
+    :open_slide_bar_center, :auto_close, :slide_bar_top_snap_back_to, :slide_bar_bottom_snap_back_to
   attr_reader :top_view, :main_view, :slide_bar_center, :slide_bar
 
   def rmq_build
     q = rmq(self)
     q.apply_style :slide_over_control_content
 
+    @is_open = true
+
     @slide_bar_height = 30
-    @slide_bar_bottom_margin = 80
-    @slide_bar_top_margin = 94
+
+    @slide_bar_top_margin = 74
+    @slide_bar_bottom_margin = 0
+
+    @slide_bar_top_snap_back_to = 94
+    @slide_bar_bottom_snap_back_to = 80
+
     slide_bar_center = 200
 
     @auto_close = true
-
-    #@top_view_container = q.append(UIView, :slide_over_control_top_view_container).get
-    #@main_view_container = q.append(UIView, :slide_over_control_main_view_container).get
 
     @slide_bar = q.append(UIView, :slide_over_control_slide_bar).get
     @slide_bar_drag = q.append(UIView, :slide_over_control_slide_bar_drag).get
@@ -23,12 +27,6 @@ class SlideOverControl < UIControl
   end
 
   def slide_bar_events
-    #rmq(@slide_bar).on(:swipe_down) do |sender, rmq_event|
-      #puts "swipe down #{rmq_event.location.inspect}"
-    #end.on(:swipe_up) do |sender, rmq_event|
-      #puts "swipe up #{rmq_event.location.inspect}"
-    #end
-    #
     rmq(@slide_bar_drag).on(:pan) do |sender, rmq_event|
       r = rmq_event.recognizer
       y = rmq_event.location_in(self).y
@@ -36,9 +34,13 @@ class SlideOverControl < UIControl
       self_height = self.bounds.size.height
       bottom_margin = self_height - y
 
-      #puts "pan, y = #{y}, bottom_margin = #{bottom_margin}"
-      y = (self_height - @slide_bar_bottom_margin) if bottom_margin < @slide_bar_bottom_margin
+      adjusted_slide_bar_bottom_margin = @slide_bar_bottom_margin + (@slide_bar_height / 2)
 
+      #puts "pan, y = #{y}, bottom_margin = #{bottom_margin}"
+      #y = (self_height - @slide_bar_bottom_margin) if bottom_margin < @slide_bar_bottom_margin
+      y = (self_height - adjusted_slide_bar_bottom_margin) if bottom_margin < adjusted_slide_bar_bottom_margin
+
+      #y = @slide_bar_height if y < @slide_bar_height
       y = @slide_bar_top_margin if y < @slide_bar_top_margin
 
       #puts "pan, y = #{y}"
@@ -48,9 +50,18 @@ class SlideOverControl < UIControl
       if r.state == UIGestureRecognizerStateEnded
         puts 'ended'
         @moving = false
-        if @auto_close && (bottom_margin < @slide_bar_bottom_margin)
+        if @auto_close && (bottom_margin < @slide_bar_bottom_snap_back_to)
           self.close
         else
+          if y < @slide_bar_top_snap_back_to
+            bounce_to @slide_bar_top_snap_back_to
+            #@slide_bar_center = @slide_bar_top_snap_back_to
+          elsif bottom_margin < @slide_bar_bottom_snap_back_to
+            #@slide_bar_center = self_height - @slide_bar_bottom_snap_back_to
+            bounce_to self_height - @slide_bar_bottom_snap_back_to
+          #else
+            #self.setNeedsLayout
+          end
           self.setNeedsLayout
         end
       else
@@ -103,6 +114,21 @@ class SlideOverControl < UIControl
     #end
   end
 
+  def bounce_to(new_y)
+    UIView.animateWithDuration(
+      0.4,
+      delay: 0.0,
+      usingSpringWithDamping: 0.6,
+      initialSpringVelocity: 0.5,
+      options: UIViewAnimationOptionCurveEaseOut,
+      animations: ->{
+        @slide_bar_center = new_y
+        layout
+      }, completion: ->(did_finish){
+        puts 'finish bounce_to'
+      })
+  end
+
   def layout
     half_bar_height = (@slide_bar_height / 2)
 
@@ -116,31 +142,11 @@ class SlideOverControl < UIControl
   def open
     return if @is_open
 
-    show_top_view
-
-#[UIView animateWithDuration: 2.0f delay: 0.0f usingSpringWithDamping: 0.5f initialSpringVelocity: 1.0f
-  #options:UIViewAnimationOptionAllowAnimatedContent animations:
-#{
-    #myView.frame = CGRectMake(20, 20, myView.frame.size.width, myView.frame.size.height);
-#}completion:nil];
-
     @is_open = true
 
+    show_top_view
 
-#animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:
-
-    UIView.animateWithDuration(
-      0.4,
-      delay: 0.0,
-      usingSpringWithDamping: 0.5,
-      initialSpringVelocity: 1.0,
-      options: UIViewAnimationOptionCurveEaseOut,
-      animations: ->{
-        @slide_bar_center = @open_slide_bar_center
-        layout
-      }, completion: ->(did_finish){
-        puts 'finished open'
-      })
+    bounce_to @open_slide_bar_center
 
     #rmq.animate(
       #duration: 0.4,

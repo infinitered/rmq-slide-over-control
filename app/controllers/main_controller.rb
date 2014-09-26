@@ -9,7 +9,7 @@ class MainController < UIViewController
     rmq(self.view).apply_style :root_view
 
     @slide_over_control = rmq.append(SlideOverControl, :slide_over_control).get.tap do |o|
-      o.slide_bar_top_margin = 114
+      o.slide_bar_top_snap_back_to = 174
       o.slide_bar_center = rmq.device.height / 2
       o.main_view = create_map
       o.top_view = rmq.create! SampleTable
