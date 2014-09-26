@@ -1,15 +1,20 @@
-slide-over-control
+rmq-slide-over-control
 ===================
 
-A RubyMotion RMQ control that places a draggable view over another view, allowing the user to show more or less of the main view below
+**Requires RMQ and iOS 7 or later**
 
-### Requires RMQ and iOS 7 or later
+[RMQ](http://rubymotionquery.com) plugin for RubyMotion
+
+A control that places a draggable view over another view, allowing the user to show more or less of the main view below
+
+![image](https://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/09/slide-over-control-example_2.gif)
+
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'slide-over-control', :git => 'git@github.com:infinitered/slide-over-control.git'
+    gem 'rmq-slide-over-control', :git => 'git@github.com:infinitered/rmq-slide-over-control.git'
     
 And then execute:
 
@@ -17,7 +22,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install draggable-split-control
+    $ gem install rmq-slide-over-control
 
 ## Usage
 

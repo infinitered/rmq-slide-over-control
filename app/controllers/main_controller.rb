@@ -3,7 +3,7 @@ class MainController < UIViewController
   def viewDidLoad
     super
 
-    self.title = 'slide-over-control example'
+    self.title = 'rmq-slide-over-control'
 
     rmq.stylesheet = MainStylesheet
     rmq(self.view).apply_style :root_view

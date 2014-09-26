@@ -1,18 +1,24 @@
+GIT
+  remote: git@github.com:infinitered/rmq.git
+  revision: 741b9fc898b8225a184e9eb9e3a22b8d6c40c724
+  specs:
+    ruby_motion_query (0.7.1)
+
 PATH
   remote: .
   specs:
-    slide-over-control (0.1)
+    rmq-slide-over-control (0.1)
+      ruby_motion_query
 
 GEM
   remote: https://rubygems.org/
   specs:
     rake (10.3.2)
-    ruby_motion_query (0.7.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   rake
-  ruby_motion_query
-  slide-over-control!
+  rmq-slide-over-control!
+  ruby_motion_query!

@@ -8,11 +8,26 @@ class SlideOverControl < UIControl
     q.apply_style :slide_over_control_content
 
     @is_open = true
+    @slide_bar = q.append(UIView, :slide_over_control_slide_bar).get
+    @slide_bar_drag = q.append(UIView, :slide_over_control_slide_bar_drag).get
 
+    set_defaults
+    slide_bar_events
+  end
+
+  def set_defaults
     @slide_bar_height = 30
 
     @slide_bar_top_margin = 74
     @slide_bar_bottom_margin = 0
+
+    rmq(@slide_bar).style do |st|
+      st.background_color = rmq.color.dark_gray
+    end
+
+    rmq(self, @slide_bar_drag).style do |st|
+      st.background_color = rmq.color.clear
+    end
 
     @slide_bar_top_snap_back_to = 94
     @slide_bar_bottom_snap_back_to = 80
@@ -20,10 +35,6 @@ class SlideOverControl < UIControl
     slide_bar_center = 200
 
     @auto_close = true
-
-    @slide_bar = q.append(UIView, :slide_over_control_slide_bar).get
-    @slide_bar_drag = q.append(UIView, :slide_over_control_slide_bar_drag).get
-    slide_bar_events
   end
 
   def slide_bar_events
@@ -37,13 +48,9 @@ class SlideOverControl < UIControl
       adjusted_slide_bar_bottom_margin = @slide_bar_bottom_margin + (@slide_bar_height / 2)
 
       #puts "pan, y = #{y}, bottom_margin = #{bottom_margin}"
-      #y = (self_height - @slide_bar_bottom_margin) if bottom_margin < @slide_bar_bottom_margin
       y = (self_height - adjusted_slide_bar_bottom_margin) if bottom_margin < adjusted_slide_bar_bottom_margin
 
-      #y = @slide_bar_height if y < @slide_bar_height
       y = @slide_bar_top_margin if y < @slide_bar_top_margin
-
-      #puts "pan, y = #{y}"
 
       @slide_bar_center = y
 
@@ -55,33 +62,15 @@ class SlideOverControl < UIControl
         else
           if y < @slide_bar_top_snap_back_to
             bounce_to @slide_bar_top_snap_back_to
-            #@slide_bar_center = @slide_bar_top_snap_back_to
           elsif bottom_margin < @slide_bar_bottom_snap_back_to
-            #@slide_bar_center = self_height - @slide_bar_bottom_snap_back_to
             bounce_to self_height - @slide_bar_bottom_snap_back_to
-          #else
-            #self.setNeedsLayout
           end
           self.setNeedsLayout
         end
       else
         @moving = true
         self.setNeedsLayout
-
-        #UIView.animateWithDuration(
-          #0.1,
-          #delay: 0.0,
-          #usingSpringWithDamping: 0.5,
-          #initialSpringVelocity: 1.0,
-          #options: UIViewAnimationOptionCurveLinear|UIViewAnimationOptionBeginFromCurrentState,
-          #animations: ->{
-            #layout
-          #}, completion: ->(did_finish){
-            #puts 'finish moving'
-          #})
       end
-
-      #self.setNeedsLayout
     end
   end
 
@@ -104,17 +93,14 @@ class SlideOverControl < UIControl
     @top_view = value
 
     rmq(self).insert(value, style: :slide_over_control_top_view, above_view: @main_view)
-    #rmq(@top_view_container).append(value, :slide_over_control_top_view)
-    #self.setNeedsLayout
   end
 
   def layoutSubviews
-    #rmq.animate(duration: 0.1, options: UIViewAnimationOptionBeginFromCurrentState) do
-      layout
-    #end
+    layout
   end
 
   def bounce_to(new_y)
+    # TODO, add usingSprintWithDamping and initialSpringVelocity to RMQ, then use RMQ's animate here
     UIView.animateWithDuration(
       0.4,
       delay: 0.0,
@@ -143,22 +129,8 @@ class SlideOverControl < UIControl
     return if @is_open
 
     @is_open = true
-
     show_top_view
-
     bounce_to @open_slide_bar_center
-
-    #rmq.animate(
-      #duration: 0.4,
-      #options: UIViewAnimationOptionCurveEaseOut,
-      #singSpringWithDamping: 0.5,
-      #initialSpringVelocity: 1.0,
-      #animations: ->(q){
-        #@slide_bar_center = @open_slide_bar_center
-        #layout
-      #}, after: ->(did_finish, last_completion_rmq){
-        #puts 'finished open'
-      #})
   end
 
   def hide_top_view

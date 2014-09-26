@@ -2,8 +2,6 @@ class MainStylesheet < ApplicationStylesheet
   include SampleTableStylesheet
   include SampleTableCellStylesheet
 
-  include SlideOverControlStylesheet
-
   def root_view(st)
     st.background_color = color.white
   end
