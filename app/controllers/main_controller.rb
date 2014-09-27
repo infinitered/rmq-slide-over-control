@@ -11,7 +11,6 @@ class MainController < UIViewController
     @slide_over_control = rmq.append(SlideOverControl, :slide_over_control).get.tap do |o|
       o.main_view = create_map
       o.top_view = rmq.create! SampleTable
-      o.layout
       rmq(o.slide_bar).append(UILabel, :slide_bar_label)
     end
 

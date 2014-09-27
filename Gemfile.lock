@@ -1,14 +1,13 @@
 GIT
   remote: git@github.com:infinitered/rmq.git
-  revision: 2b30471c1f8d73f8e00c7c2681227225d2a658ea
+  revision: eafd6d3602ac988aeb4e99e9f5336bc2b03966ba
   specs:
-    ruby_motion_query (0.7.1)
+    ruby_motion_query (0.8.0)
 
 PATH
   remote: .
   specs:
     rmq-slide-over-control (0.1)
-      ruby_motion_query
 
 GEM
   remote: https://rubygems.org/
