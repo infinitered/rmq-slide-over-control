@@ -1,17 +1,17 @@
 class SlideOverControl < UIControl
 
-  attr_accessor :slide_bar_bottom_margin,
+  attr_accessor :slide_bar_height,
                 :slide_bar_top_margin,
-                :slide_bar_height,
-                :open_slide_bar_center,
-                :auto_close,
                 :slide_bar_top_snap_back_to,
-                :slide_bar_bottom_snap_back_to
+                :slide_bar_bottom_margin,
+                :slide_bar_bottom_snap_back_to,
+                :slide_bar_center_when_opening,
+                :auto_close
 
   attr_reader   :top_view,
                 :main_view,
-                :slide_bar_center,
-                :slide_bar
+                :slide_bar,
+                :slide_bar_center
 
   def rmq_styler
     RubyMotionQuery::Stylers::SlideOverControlStyler.new(self)
@@ -48,7 +48,6 @@ class SlideOverControl < UIControl
     end
 
     @auto_close = true
-    self.setNeedsLayout
   end
 
   def slide_bar_events
@@ -61,7 +60,6 @@ class SlideOverControl < UIControl
 
       adjusted_slide_bar_bottom_margin = @slide_bar_bottom_margin + (@slide_bar_height / 2)
 
-      #puts "pan, y = #{y}, bottom_margin = #{bottom_margin}"
       y = (self_height - adjusted_slide_bar_bottom_margin) if bottom_margin < adjusted_slide_bar_bottom_margin
 
       y = @slide_bar_top_margin if y < @slide_bar_top_margin
@@ -97,16 +95,14 @@ class SlideOverControl < UIControl
 
   def slide_bar_center=(value)
     @slide_bar_center = value
-    @open_slide_bar_center = value
+    @slide_bar_center_when_opening = value
   end
 
   def main_view=(value)
     rmq(@main_view).remove if @main_view
     @main_view = value
 
-    #rmq(@main_view_container).append(value, :slide_over_control_main_view)
     rmq(self).prepend(value)
-    self.setNeedsLayout
   end
 
   def top_view=(value)
@@ -114,7 +110,6 @@ class SlideOverControl < UIControl
     @top_view = value
 
     rmq(self).insert(value, above_view: @main_view)
-    self.setNeedsLayout
   end
 
   def layoutSubviews
@@ -163,9 +158,9 @@ class SlideOverControl < UIControl
 
     if animate
       show_top_view
-      bounce_to @open_slide_bar_center
+      bounce_to @slide_bar_center_when_opening
     else
-      @slide_bar_center = @open_slide_bar_center
+      @slide_bar_center = @slide_bar_center_when_opening
       show_top_view
       layout
     end

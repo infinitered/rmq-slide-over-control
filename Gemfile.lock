@@ -7,7 +7,8 @@ GIT
 PATH
   remote: .
   specs:
-    rmq-slide-over-control (0.1)
+    rmq-slide-over-control (0.5)
+      ruby_motion_query (>= 0.8.0)
 
 GEM
   remote: https://rubygems.org/
