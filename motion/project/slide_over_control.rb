@@ -3,13 +3,15 @@ class SlideOverControl < UIControl
     :open_slide_bar_center, :auto_close, :slide_bar_top_snap_back_to, :slide_bar_bottom_snap_back_to
   attr_reader :top_view, :main_view, :slide_bar_center, :slide_bar
 
+  def rmq_styler(view = nil)
+    RubyMotionQuery::Stylers::SlideOverControlStyler.new(self)
+  end
+
   def rmq_build
     q = rmq(self)
-    q.apply_style :slide_over_control_content
-
     @is_open = true
-    @slide_bar = q.append(UIView, :slide_over_control_slide_bar).get
-    @slide_bar_drag = q.append(UIView, :slide_over_control_slide_bar_drag).get
+    @slide_bar = q.append(UIView).get
+    @slide_bar_drag = q.append(UIView).get
 
     set_defaults
     slide_bar_events
@@ -21,9 +23,7 @@ class SlideOverControl < UIControl
     @slide_bar_top_margin = 74
     @slide_bar_bottom_margin = 0
 
-    rmq(@slide_bar).style do |st|
-      st.background_color = rmq.color.dark_gray
-    end
+    slide_bar_background_color = rmq.color.dark_gray
 
     rmq(self, @slide_bar_drag).style do |st|
       st.background_color = rmq.color.clear
@@ -74,6 +74,14 @@ class SlideOverControl < UIControl
     end
   end
 
+  def slide_bar_background_color=(value)
+    @slide_bar_background_color = value
+
+    rmq(@slide_bar).style do |st|
+      st.background_color = value
+    end
+  end
+
   def slide_bar_center=(value)
     @slide_bar_center = value
     @open_slide_bar_center = value
@@ -84,7 +92,7 @@ class SlideOverControl < UIControl
     @main_view = value
 
     #rmq(@main_view_container).append(value, :slide_over_control_main_view)
-    rmq(self).prepend(value, :slide_over_control_main_view)
+    rmq(self).prepend(value)
     #self.setNeedsLayout
   end
 
@@ -92,7 +100,7 @@ class SlideOverControl < UIControl
     rmq(@top_view).remove if @top_view
     @top_view = value
 
-    rmq(self).insert(value, style: :slide_over_control_top_view, above_view: @main_view)
+    rmq(self).insert(value, above_view: @main_view)
   end
 
   def layoutSubviews

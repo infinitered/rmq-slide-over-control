@@ -8,6 +8,16 @@ class MainStylesheet < ApplicationStylesheet
 
   def slide_over_control(st)
     st.frame = :full #"a0:z99"
+
+    st.slide_bar_top_margin = 74
+    st.slide_bar_top_snap_back_to = 174
+
+    st.slide_bar_center = rmq.device.height / 2
+    st.slide_bar_background_color = color.dark_gray
+    st.auto_close = true
+
+    st.slide_bar_bottom_margin = 0
+    st.slide_bar_bottom_snap_back_to = 130
   end
 
   def button(st)
@@ -31,7 +41,17 @@ class MainStylesheet < ApplicationStylesheet
   def toggle_auto_close(st)
     button st
     st.frame = "g0:m0"
+    toggle_auto_close_enabled st
+  end
+
+  def toggle_auto_close_enabled(st)
     st.text = 'Disable auto close'
+    st.background_color = color.blue
+  end
+
+  def toggle_auto_close_disabled(st)
+    st.text = 'Enable auto close'
+    st.background_color = color.black
   end
 
   def slide_bar_label(st)

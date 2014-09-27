@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:infinitered/rmq.git
-  revision: 741b9fc898b8225a184e9eb9e3a22b8d6c40c724
+  revision: 2b30471c1f8d73f8e00c7c2681227225d2a658ea
   specs:
     ruby_motion_query (0.7.1)
 

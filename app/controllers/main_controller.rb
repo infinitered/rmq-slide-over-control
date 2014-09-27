@@ -9,8 +9,6 @@ class MainController < UIViewController
     rmq(self.view).apply_style :root_view
 
     @slide_over_control = rmq.append(SlideOverControl, :slide_over_control).get.tap do |o|
-      o.slide_bar_top_snap_back_to = 174
-      o.slide_bar_center = rmq.device.height / 2
       o.main_view = create_map
       o.top_view = rmq.create! SampleTable
       o.layout
@@ -22,11 +20,8 @@ class MainController < UIViewController
 
     rmq.append(UIButton, :toggle_auto_close).on(:touch) do |sender|
       @slide_over_control.auto_close = !@slide_over_control.auto_close
-      rmq(sender).data = if @slide_over_control.auto_close
-        'Disable auto close'
-      else
-        'Enable auto close'
-      end
+      new_style = @slide_over_control.auto_close ? :toggle_auto_close_enabled : :toggle_auto_close_disabled
+      rmq(sender).apply_style(new_style)
     end
   end
 
@@ -49,5 +44,4 @@ class MainController < UIViewController
   def willAnimateRotationToInterfaceOrientation(orientation, duration: duration)
     rmq.all.reapply_styles
   end
-
 end
