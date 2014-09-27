@@ -8,7 +8,7 @@ class MainController < UIViewController
     rmq.stylesheet = MainStylesheet
     rmq(self.view).apply_style :root_view
 
-    @slide_over_control = rmq.append(SlideOverControl, :slide_over_control).get.tap do |o|
+    @slide_over_control = rmq.append!(SlideOverControl, :slide_over_control).tap do |o|
       o.main_view = create_map
       o.top_view = rmq.create! SampleTable
       rmq(o.slide_bar).append(UILabel, :slide_bar_label)

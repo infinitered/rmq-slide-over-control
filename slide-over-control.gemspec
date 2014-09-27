@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-VERSION = "0.5"
+VERSION = "0.5.1"
 
 Gem::Specification.new do |spec|
   spec.name          = "rmq-slide-over-control"

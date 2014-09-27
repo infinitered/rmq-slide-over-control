@@ -1,16 +1,18 @@
-rmq-slide-over-control
+[![image](http://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/09/rmq_plugin.png)](http://rubymotionquery.com)
+
+# rmq-slide-over-control
+
 ===================
 
-**Requires RMQ 0.8.0 or later, and iOS 7 or later**
-
-[RMQ](http://rubymotionquery.com) plugin for RubyMotion
-
-A control that places a draggable view over another view, allowing the user to show more or less of the main view below
+[RMQ](http://rubymotionquery.com) **plugin** for RubyMotion. A control that places a draggable view over another view, allowing the user to show more or less of the main view below
 
 ![image](https://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/09/slide-over-control-example_2.gif)
 
+===================
 
 ## Installation
+
+**Requires RMQ 0.8.0 or later, and iOS 7 or later**
 
 Add this line to your application's Gemfile:
 
@@ -24,13 +26,17 @@ And then execute:
 
 See the sample app in this repo (just download the repo and run it, look in /app for files).
 
+### Parts
+
+![image](http://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/09/rmq-slide-over-control_diagram.png)
+
 ### Example using stylesheet:
 
 In your controller:
 
 ```ruby
-@slide_over_control = rmq.append(SlideOverControl, :slide_over_control).get.tap do |o|
-  o.main_view = rmq.create!(UIImageView, :photo_of_kittens) 
+@slide_over_control = rmq.append!(SlideOverControl, :slide_over_control).tap do |o|
+  o.main_view = rmq.create!(UIImageView, :photo_of_kittens)
   o.top_view = rmq.create!(UITextView, :kittens_description)
   rmq(o.slide_bar).append(UILabel, :slide_bar_label)
 end
@@ -39,13 +45,13 @@ end
 In your stylesheet:
 
 ```ruby
-
 def slide_over_control(st)
   st.frame = :full
 
   st.slide_bar_top_margin = 74
   st.slide_bar_top_snap_back_to = 174
 
+  # Where the side_bar starts at
   st.slide_bar_center = rmq.device.screen_height / 2
 
   st.slide_bar_bottom_margin = 0
@@ -57,15 +63,12 @@ def slide_over_control(st)
   # st.slide_bar_background_color = color.dark_gray
 end
 
-def photos_of_kittens(st)
-  st.frame = :full
-  # Style this
+def photo_of_kittens(st)
+  st.image = image.resource('kittens')
 end
 
-
 def kittens_description(st)
-  st.frame = :full
-  # Style this
+  st.background_color = color.light_gray
 end
 ```
 
@@ -75,6 +78,16 @@ If you don't use stylesheets, then just call the same methods that are in the st
 my_view = rmq.append! SlideOverControl
 my_view.slide_bar_top_margin = 74
 # etc
+```
+
+### Methods
+
+```
+@slide_over_control.open
+@slide_over_control.close
+@slide_over_control.main_view = foo
+@slide_over_control.top_view = bar
+@slide_over_control.auto_close = true
 ```
 
 ## Contributing
