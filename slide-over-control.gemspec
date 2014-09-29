@@ -20,6 +20,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["motion","motion/project"]
 
   spec.add_runtime_dependency 'ruby_motion_query', '>= 0.8.0'
-  spec.add_development_dependency 'ruby_motion_query', '>= 0.8.0'
   spec.add_development_dependency 'rake'
 end
