@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 $:.unshift('/Library/RubyMotion/lib')
 require 'motion/project/template/ios'
-require './motion/slide_over_control'
 
 require 'bundler'
 require 'motion/project/template/gem/gem_tasks'
