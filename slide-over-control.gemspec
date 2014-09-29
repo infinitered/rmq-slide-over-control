@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../motion', __FILE__)
 
-VERSION = "0.5.1"
+VERSION = "0.5.2"
 
 Gem::Specification.new do |spec|
   spec.name          = "rmq-slide-over-control"
