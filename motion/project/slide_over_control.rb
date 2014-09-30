@@ -6,7 +6,10 @@ class SlideOverControl < UIControl
                 :slide_bar_bottom_margin,
                 :slide_bar_bottom_snap_back_to,
                 :slide_bar_center_when_opening,
-                :auto_close
+                :auto_close,
+                :after_close,
+                :after_auto_close,
+                :after_open
 
   attr_reader   :top_view,
                 :main_view,
@@ -73,7 +76,9 @@ class SlideOverControl < UIControl
       if r.state == UIGestureRecognizerStateEnded
         @moving = false
         if @auto_close && (bottom_margin < @slide_bar_bottom_snap_back_to)
-          self.close
+          self.close(after: ->{
+            @after_auto_close.call if @after_auto_close
+          })
         else
           if y < @slide_bar_top_snap_back_to
             bounce_to @slide_bar_top_snap_back_to
@@ -163,10 +168,14 @@ class SlideOverControl < UIControl
 
     @is_open = true
     animate = params[:animate] != false
+    after = params[:after]
 
     if animate
       show_top_view
-      bounce_to @slide_bar_center_when_opening, params
+      bounce_to(@slide_bar_center_when_opening, after: ->{
+        after.call if after
+        @after_open.call if @after_open
+      })
     else
       @slide_bar_center = @slide_bar_center_when_opening
       show_top_view
@@ -194,6 +203,7 @@ class SlideOverControl < UIControl
           @is_closing = false
           hide_top_view if did_finish
           after.call if after && did_finish
+          @after_close.call if @after_close && did_finish
         })
     else
       hide_top_view
