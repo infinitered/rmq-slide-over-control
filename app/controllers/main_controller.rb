@@ -22,9 +22,9 @@ class MainController < UIViewController
     }
 
     # TODO, make them custom events. rmq(@slide_over_control).on(:after_close){}
-    @slide_over_control.after_close = ->{puts 'after close callback'}
-    @slide_over_control.after_open = ->{puts 'after open callback'}
-    @slide_over_control.after_auto_close = ->{puts 'after auto close callback'}
+    @slide_over_control.after_close{puts 'after close callback'}
+    @slide_over_control.after_open{puts 'after open callback'}
+    @slide_over_control.after_auto_close{puts 'after auto close callback'}
 
     rmq.append(UIButton, :toggle_auto_close).on(:touch) do |sender|
       @slide_over_control.auto_close = !@slide_over_control.auto_close

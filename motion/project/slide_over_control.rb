@@ -11,6 +11,7 @@ class SlideOverControl < UIControl
                 :after_auto_close,
                 :after_open
 
+
   attr_reader   :top_view,
                 :main_view,
                 :slide_bar,
@@ -211,5 +212,17 @@ class SlideOverControl < UIControl
       layout
       @is_closing = false
     end
+  end
+
+  def after_open(&block)
+    @after_open = block
+  end
+
+  def after_close(&block)
+    @after_close = block
+  end
+
+  def after_auto_close(&block)
+    @after_auto_close = block
   end
 end
