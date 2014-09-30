@@ -126,8 +126,11 @@ class SlideOverControl < UIControl
     @slide_bar_drag.frame = @slide_bar.frame unless @moving
   end
 
-  def bounce_to(new_y)
+  def bounce_to(new_y, params = {})
     # TODO, add usingSprintWithDamping and initialSpringVelocity to RMQ, then use RMQ's animate here
+
+    after = params[:after]
+
     UIView.animateWithDuration(
       0.4,
       delay: 0.0,
@@ -138,6 +141,7 @@ class SlideOverControl < UIControl
         @slide_bar_center = new_y
         layout
       }, completion: ->(did_finish){
+        after.call if after && did_finish
       })
   end
 
@@ -158,7 +162,7 @@ class SlideOverControl < UIControl
 
     if animate
       show_top_view
-      bounce_to @slide_bar_center_when_opening
+      bounce_to @slide_bar_center_when_opening, params
     else
       @slide_bar_center = @slide_bar_center_when_opening
       show_top_view
@@ -173,6 +177,7 @@ class SlideOverControl < UIControl
     @is_closing = true
 
     animate = params[:animate] != false
+    after = params[:after]
 
     if animate
       rmq.animate(
@@ -183,6 +188,7 @@ class SlideOverControl < UIControl
           layout
         }, after: ->(did_finish, last_completion_rmq){
           @is_closing = false
+          after.call if after && did_finish
           hide_top_view if did_finish
         })
     else
