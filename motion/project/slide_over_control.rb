@@ -192,8 +192,8 @@ class SlideOverControl < UIControl
           layout
         }, after: ->(did_finish, last_completion_rmq){
           @is_closing = false
-          after.call if after && did_finish
           hide_top_view if did_finish
+          after.call if after && did_finish
         })
     else
       hide_top_view
