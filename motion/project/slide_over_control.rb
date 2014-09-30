@@ -13,6 +13,10 @@ class SlideOverControl < UIControl
                 :slide_bar,
                 :slide_bar_center
 
+  def open?
+    @is_open
+  end
+
   def rmq_styler
     RubyMotionQuery::Stylers::SlideOverControlStyler.new(self)
   end
