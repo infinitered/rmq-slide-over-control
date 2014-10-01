@@ -1,7 +1,6 @@
 class SlideOverControl < UIControl
 
-  attr_accessor :slide_bar_height,
-                :slide_bar_top_margin,
+  attr_accessor :slide_bar_top_margin,
                 :slide_bar_top_snap_back_to,
                 :slide_bar_bottom_margin,
                 :slide_bar_bottom_snap_back_to,
@@ -11,10 +10,10 @@ class SlideOverControl < UIControl
                 :after_auto_close,
                 :after_open
 
-
   attr_reader   :top_view,
                 :main_view,
                 :slide_bar,
+                :slide_bar_height,
                 :slide_bar_center
 
   def open?
@@ -28,14 +27,19 @@ class SlideOverControl < UIControl
   def rmq_build
     q = rmq(self)
     @is_open = true
-    @slide_bar = q.append(UIView).get
-    @slide_bar_drag = q.append(UIView).get
+
+    @top_container = q.append(UIView).tap do |tpq|
+      @slide_bar = tpq.append(UIView).get
+      @slide_bar_drag = tpq.append(UIView).get
+    end.get
+
     set_defaults
     slide_bar_events
   end
 
   def rmq_style_applied
     layout
+    layout_side_bar
   end
 
   def set_defaults
@@ -53,6 +57,10 @@ class SlideOverControl < UIControl
     rmq(self, @slide_bar_drag).style do |st|
       st.background_color = rmq.color.clear
       st.clips_to_bounds = true
+    end
+
+    rmq(@top_container).style do |st|
+      st.background_color = rmq.color.gray
     end
 
     @auto_close = true
@@ -113,13 +121,20 @@ class SlideOverControl < UIControl
     @main_view = value
 
     rmq(self).prepend(value)
+    rmq(@main_view).layout(:full)
   end
 
   def top_view=(value)
     rmq(@top_view).remove if @top_view
     @top_view = value
 
-    rmq(self).insert(value, above_view: @main_view)
+    rmq(@top_container).append(value)
+
+  end
+
+  def slide_bar_height=(value)
+    @slide_bar_height = value
+    layout_side_bar
   end
 
   def layoutSubviews
@@ -129,10 +144,12 @@ class SlideOverControl < UIControl
   def layout
     half_bar_height = (@slide_bar_height / 2)
 
-    rmq(@main_view).layout(:full)
-    rmq(@top_view).layout(l: 0, fr: 0, t: @slide_bar_center + half_bar_height, fb: 0)
+    rmq(@top_container).layout(l: 0, fr: 0, t: @slide_bar_center - half_bar_height, fb: -200)
+    rmq(@top_view).layout(l: 0, fr: 0, t: @slide_bar_height, fb: 200)
+  end
 
-    rmq(@slide_bar).layout(l: 0, fr: 0, h: @slide_bar_height, t: @slide_bar_center - half_bar_height )
+  def layout_side_bar
+    rmq(@slide_bar).layout(l: 0, t: 0, h: @slide_bar_height, fr: 0)
     @slide_bar_drag.frame = @slide_bar.frame unless @moving
   end
 
@@ -157,11 +174,11 @@ class SlideOverControl < UIControl
 
 
   def hide_top_view
-    rmq(@slide_bar, @top_view).hide
+    rmq(@top_container).hide
   end
 
   def show_top_view
-    rmq(@slide_bar, @top_view).show
+    rmq(@top_container).show
   end
 
   def open(params = {})
@@ -171,12 +188,28 @@ class SlideOverControl < UIControl
     animate = params[:animate] != false
     after = params[:after]
 
+    @slide_bar_center = @slide_bar_center_when_opening
+    layout
+    frame = @top_container.frame
+
+    rmq(@top_container).layout(t: self.bounds.size.height)
+
     if animate
       show_top_view
-      bounce_to(@slide_bar_center_when_opening, after: ->{
-        after.call if after
-        @after_open.call if @after_open
-      })
+
+      UIView.animateWithDuration(
+        0.4,
+        delay: 0.1,
+        usingSpringWithDamping: 0.6,
+        initialSpringVelocity: 0.5,
+        options: UIViewAnimationOptionCurveEaseOut,
+        animations: ->{
+          @top_container.frame = frame
+        }, completion: ->(did_finish){
+          after.call if after && did_finish
+          @after_open.call if @after_open
+        })
+
     else
       @slide_bar_center = @slide_bar_center_when_opening
       show_top_view
@@ -193,13 +226,14 @@ class SlideOverControl < UIControl
     animate = params[:animate] != false
     after = params[:after]
 
+    self_height = self.bounds.size.height
+
     if animate
       rmq.animate(
-        duration: 0.3,
+        duration: 0.4,
         options: UIViewAnimationOptionCurveEaseIn,
         animations: ->(q){
-          @slide_bar_center = self.bounds.size.height + (@slide_bar_height / 2)
-          layout
+          rmq(@top_container).layout(t: self_height)
         }, after: ->(did_finish, last_completion_rmq){
           @is_closing = false
           hide_top_view if did_finish
