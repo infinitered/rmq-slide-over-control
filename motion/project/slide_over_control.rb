@@ -14,7 +14,10 @@ class SlideOverControl < UIControl
                 :main_view,
                 :slide_bar,
                 :slide_bar_height,
-                :slide_bar_center
+                :slide_bar_center,
+                :slide_bar_background_color,
+                :top_view_container_background_color
+
 
   def open?
     @is_open
@@ -59,9 +62,7 @@ class SlideOverControl < UIControl
       st.clips_to_bounds = true
     end
 
-    rmq(@top_container).style do |st|
-      st.background_color = rmq.color.gray
-    end
+    self.top_view_container_background_color = rmq.color.white
 
     @auto_close = true
   end
@@ -111,6 +112,14 @@ class SlideOverControl < UIControl
     end
   end
 
+  def top_view_container_background_color=(value)
+    @top_view_container_background_color = value
+
+    rmq(@top_view_container).style do |st|
+      st.background_color = value
+    end
+  end
+
   def slide_bar_center=(value)
     @slide_bar_center = value
     @slide_bar_center_when_opening = value
@@ -129,7 +138,6 @@ class SlideOverControl < UIControl
     @top_view = value
 
     rmq(@top_container).append(value)
-
   end
 
   def slide_bar_height=(value)
@@ -144,8 +152,8 @@ class SlideOverControl < UIControl
   def layout
     half_bar_height = (@slide_bar_height / 2)
 
-    rmq(@top_container).layout(l: 0, fr: 0, t: @slide_bar_center - half_bar_height, fb: -200)
-    rmq(@top_view).layout(l: 0, fr: 0, t: @slide_bar_height, fb: 200)
+    rmq(@top_container).layout(l: 0, fr: 0, t: @slide_bar_center - half_bar_height, fb: -40)
+    rmq(@top_view).layout(l: 0, fr: 0, t: @slide_bar_height, fb: 40)
   end
 
   def layout_side_bar

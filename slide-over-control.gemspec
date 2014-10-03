@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../motion', __FILE__)
 
-VERSION = "0.5.2"
+VERSION = "0.5.3"
 
 Gem::Specification.new do |spec|
   spec.name          = "rmq-slide-over-control"
@@ -21,6 +21,6 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["motion"]
 
-  spec.add_dependency 'ruby_motion_query', '>= 0.8.0'
+  spec.add_runtime_dependency 'ruby_motion_query', '>= 0.8.0'
   spec.add_development_dependency 'rake'
 end

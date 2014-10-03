@@ -57,10 +57,13 @@ def slide_over_control(st)
   st.slide_bar_bottom_margin = 0
   st.slide_bar_bottom_snap_back_to = 130
 
+  st.top_view_container_background_color = color.white
+
   # Other options
   # st.slide_bar_height = 40
   # st.auto_close = false
   # st.slide_bar_background_color = color.dark_gray
+  # st.top_view_container_background_color = color.white
 end
 
 def photo_of_kittens(st)
@@ -88,6 +91,10 @@ my_view.slide_bar_top_margin = 74
 @slide_over_control.main_view = foo
 @slide_over_control.top_view = bar
 @slide_over_control.auto_close = true
+
+@slide_over_control.after_close{ do_something }
+@slide_over_control.after_auto_close{ do_something }
+@slide_over_control.after_open{ do_something }
 ```
 
 ## Contributing

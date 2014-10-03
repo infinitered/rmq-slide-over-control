@@ -21,6 +21,7 @@ class MainStylesheet < ApplicationStylesheet
     # st.slide_bar_height = 40
     # st.auto_close = false
     # st.slide_bar_background_color = color.dark_gray
+    # st.top_view_container_background_color = color.gray
   end
 
   def button(st)
