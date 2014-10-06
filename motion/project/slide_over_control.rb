@@ -115,7 +115,7 @@ class SlideOverControl < UIControl
   def top_view_container_background_color=(value)
     @top_view_container_background_color = value
 
-    rmq(@top_view_container).style do |st|
+    rmq(@top_container).style do |st|
       st.background_color = value
     end
   end
