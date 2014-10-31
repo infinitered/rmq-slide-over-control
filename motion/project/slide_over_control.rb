@@ -8,7 +8,9 @@ class SlideOverControl < UIControl
                 :auto_close,
                 :after_close,
                 :after_auto_close,
-                :after_open
+                :after_open,
+                :open_duration,
+                :close_duration
 
   attr_reader   :top_view,
                 :main_view,
@@ -55,6 +57,9 @@ class SlideOverControl < UIControl
     @slide_bar_bottom_snap_back_to = 80
     @slide_bar_center = 200
 
+    @open_duration = 0.4
+    @close_duration = 0.4
+
     self.slide_bar_background_color = rmq.color.dark_gray
 
     rmq(self, @slide_bar_drag).style do |st|
@@ -86,7 +91,7 @@ class SlideOverControl < UIControl
       if r.state == UIGestureRecognizerStateEnded
         @moving = false
         if @auto_close && (bottom_margin < @slide_bar_bottom_snap_back_to)
-          self.close(after: ->{
+          self.close(duration: 0.1, options: UIViewAnimationOptionCurveLinear, after: ->{
             @after_auto_close.call if @after_auto_close
           })
         else
@@ -167,7 +172,7 @@ class SlideOverControl < UIControl
     after = params[:after]
 
     UIView.animateWithDuration(
-      0.4,
+      0.3,
       delay: 0.0,
       usingSpringWithDamping: 0.6,
       initialSpringVelocity: 0.5,
@@ -196,9 +201,13 @@ class SlideOverControl < UIControl
     animate = params[:animate] != false
     after = params[:after]
 
+    open_duration = params[:duration] || @open_duration
+
     @slide_bar_center = @slide_bar_center_when_opening
     layout
     frame = @top_container.frame
+
+    options = params[:options] || UIViewAnimationOptionCurveEaseOut
 
     rmq(@top_container).layout(t: self.bounds.size.height)
 
@@ -206,11 +215,11 @@ class SlideOverControl < UIControl
       show_top_view
 
       UIView.animateWithDuration(
-        0.4,
+        @open_duration,
         delay: 0.1,
         usingSpringWithDamping: 0.6,
         initialSpringVelocity: 0.5,
-        options: UIViewAnimationOptionCurveEaseOut,
+        options: options,
         animations: ->{
           @top_container.frame = frame
         }, completion: ->(did_finish){
@@ -233,13 +242,15 @@ class SlideOverControl < UIControl
 
     animate = params[:animate] != false
     after = params[:after]
+    options = params[:options] || UIViewAnimationOptionCurveEaseIn
+    close_duration = params[:duration] || @close_duration
 
     self_height = self.bounds.size.height
 
     if animate
       rmq.animate(
-        duration: 0.4,
-        options: UIViewAnimationOptionCurveEaseIn,
+        duration: close_duration,
+        options: options,
         animations: ->(q){
           rmq(@top_container).layout(t: self_height)
         }, after: ->(did_finish, last_completion_rmq){
