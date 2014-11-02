@@ -88,6 +88,14 @@ describe "slideover_controler" do
     it "should set a new top view" do
       @view.instance_variable_get("@top_view").should == @new_main_view
     end
+
+    it "should allow nil values for the top view" do
+      should.not.raise(StandardError) {
+        @view.top_view = nil
+      }
+
+      @view.instance_variable_get("@top_view").should == nil
+    end
   end
 
   describe "slide_bar_height=" do
