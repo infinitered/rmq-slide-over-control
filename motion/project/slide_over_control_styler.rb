@@ -29,6 +29,15 @@ module RubyMotionQuery
 
       def slide_bar_bottom_snap_back_to=(value) ;         @view.slide_bar_bottom_snap_back_to = value ; end
       def slide_bar_bottom_snap_back_to ;                 @view.slide_bar_bottom_snap_back_to ; end
+
+      def slide_bar_bottom_snap_back_to=(value) ;         @view.slide_bar_bottom_snap_back_to = value ; end
+      def slide_bar_bottom_snap_back_to ;                 @view.slide_bar_bottom_snap_back_to ; end
+
+      def open_duration=(value) ;                         @view.open_duration = value ; end
+      def open_duration ;                                 @view.open_duration ; end
+
+      def close_duration=(value) ;                        @view.close_duration = value ; end
+      def close_duration ;                                @view.close_duration ; end
     end
 
   end
