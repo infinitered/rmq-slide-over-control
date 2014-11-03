@@ -142,7 +142,7 @@ class SlideOverControl < UIControl
     rmq(@top_view).remove if @top_view
     @top_view = value
 
-    rmq(@top_container).append(value)
+    rmq(@top_container).append(value) if value
   end
 
   def slide_bar_height=(value)
