@@ -4,7 +4,7 @@
 
 ===================
 
-[RMQ](http://rubymotionquery.com) **plugin** for RubyMotion. A control that places a draggable view over another view, allowing the user to show more or less of the main view below and is maintained by ![Infinite Red](http://infinite.red), a web and mobile development company based in Portland, OR and San Francisco, CA.
+[RMQ](http://rubymotionquery.com) **plugin** for RubyMotion. A control that places a draggable view over another view, allowing the user to show more or less of the main view below and is maintained by [Infinite Red](http://infinite.red), a web and mobile development company based in Portland, OR and San Francisco, CA.
 
 ![image](https://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/09/slide-over-control-example_2.gif)
 
