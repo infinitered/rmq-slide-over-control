@@ -17,7 +17,7 @@
 Add this line to your application's Gemfile:
 
     gem 'rmq-slide-over-control', :git => 'git@github.com:infinitered/rmq-slide-over-control.git'
-    
+
 And then execute:
 
     $ bundle
@@ -104,3 +104,7 @@ my_view.slide_bar_top_margin = 74
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Premium Support
+
+[RMQ](https://github.com/infinitered/rmq) and [rmq-slide-over-control](https://github.com/infinitered/rmq-slide-over-control), as open source projects, are free to use and always will be. [Infinite Red](https://infinite.red/) offers premium RMQ and rmq-slide-over-control support and general mobile app design/development services. Email us at [hello@infinite.red](mailto:hello@infinite.red) to get in touch with us for more details.
